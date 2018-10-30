@@ -1,0 +1,46 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.0"
+    }
+}
+
+apply plugin: 'kotlin2js'
+apply plugin: 'kotlin-dce-js'
+
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js"
+}
+
+ext.webDir = "$buildDir/web"
+
+compileKotlin2Js {
+    kotlinOptions.outputFile = "${webDir}/particles.js"
+    kotlinOptions.sourceMap = true
+    kotlinOptions.sourceMapEmbedSources = "always"
+}
+
+runDceKotlinJs.dceOptions.outputDirectory = webDir
+
+task("copyStatic") {
+    dependsOn "runDceKotlinJs"
+
+    doLast {
+        copy {
+            from "$projectDir/src/main/resources/"
+            into webDir
+        }
+    }
+}
+
+assemble.dependsOn copyStatic

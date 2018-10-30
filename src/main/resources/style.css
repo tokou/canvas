@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+}
+
+canvas {
+  vertical-align: middle;
+}
+
+#fps {
+    color: white;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-family: sans-serif;
+}
